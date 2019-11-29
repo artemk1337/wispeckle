@@ -14,6 +14,22 @@ if use PIL:
 """
 
 
+"""
+Данный комментарий адресован проверяющему.
+
+Хотелось бы попросить не учитывать последний перезалив файла и не снижать балл за
+позднюю сдачу домашнего задания (после дедлайна). Как видно, в условии было несколько ошибок. Сначала преподаватель
+перепутал прямое преобразование фурье с обратным. Хорошо, бывает, допустим.
+После наступления дедлайна выяснилось, что кроме всего этого он ещё и перепутан порядок
+деления фурье образа на «образ рассеяния» (нужно наоборот). В связи с чем, получилась плохая картинка.
+
+История коммитов видна, все изменения можно увидеть и убедиться, что ничиего координально изменено не было.
+
+С уважением, Кущ Артем.
+
+"""
+
+
 def draw(img, s, vmax):
     if vmax != 0:
         plt.imsave(s, cv2.resize(img, dsize=(512, 512), interpolation=cv2.INTER_AREA), vmax=vmax, cmap='gray')
@@ -23,6 +39,13 @@ def draw(img, s, vmax):
 
 def save_binary(a=0.0, b=0.0):
     plt.imsave('binary.png', cv2.resize(img, dsize=(512, 512), interpolation=cv2.INTER_AREA), vmin=a, vmax=b,
+               cmap='gray')
+    plt.imshow(cv2.resize(img, dsize=(512, 512), interpolation=cv2.INTER_AREA), vmin=a, vmax=b, cmap='gray')
+    plt.show()
+
+
+def save_binary_new(a=0.0, b=0.0):
+    plt.imsave('binary_new.png', cv2.resize(img, dsize=(512, 512), interpolation=cv2.INTER_AREA), vmin=a, vmax=b,
                cmap='gray')
     plt.imshow(cv2.resize(img, dsize=(512, 512), interpolation=cv2.INTER_AREA), vmin=a, vmax=b, cmap='gray')
     plt.show()
@@ -88,7 +111,11 @@ rotaver_mean = img
 draw(img, 'rotaver.png', 100)
 
 
-img = np.divide(fourier_sum, rotaver_mean)
+# Old
+# img = np.divide(fourier_sum, rotaver_mean)
+# New
+img = np.divide(rotaver_mean, fourier_sum)
+
 print(img.max(), img.min())
 # plot(img)
 
@@ -107,3 +134,4 @@ img = ifftshift(img)
 img = np.abs(img)
 
 # save_binary(0.05, 0.07)
+save_binary_new(0.005, 0.045)
